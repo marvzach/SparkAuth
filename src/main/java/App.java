@@ -45,6 +45,7 @@ public class App {
             Map<String, Object> model = new HashMap<>();
             String email = req.queryParams("email");
             String password = req.queryParams("password");
+            String username = req.queryParams("username");
 
             if(email.trim().isEmpty() || password.trim().isEmpty())
             {
@@ -56,7 +57,7 @@ public class App {
                     System.out.println("Email does not exist");
                 }
                 else {
-                    User user = new User(email, password);
+                    User user = new User(email, password,username);
 
                     if(user.getUserPassword().equals(password))
                     {
@@ -93,10 +94,11 @@ public class App {
             Map<String, Object> model = new HashMap<>();
 
             String email = req.queryParams("email");
+            String username = req.queryParams("username");
             String password = req.queryParams("password");
             String confirm_password = req.queryParams("confirm_password");
 
-            if(email.trim().isEmpty() || password.trim().isEmpty() || confirm_password.trim().isEmpty())
+            if(email.trim().isEmpty() || username.trim().isEmpty() || password.trim().isEmpty() || confirm_password.trim().isEmpty())
             {
                 System.out.println("please fill in all the fields");
             }
@@ -106,9 +108,10 @@ public class App {
                 {
                     if(password.equals(confirm_password))
                     {
-                        User user = new User(email,password);
+                        User user = new User(email,password,username);
                         user.register();
                         model.put("email" ,user.getEmail());
+                        model.put("username" ,user.getUsername());
                         model.put("template","templates/home.vtl");
                     }
                     else {

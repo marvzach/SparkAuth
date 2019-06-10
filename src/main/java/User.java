@@ -5,15 +5,15 @@ import org.sql2o.Connection;
 import java.util.List;
 
 public class User {
-    private String username;
     private String email;
     private String password;
+    private String username;
     private int id;
 
-    public User(String email, String password) {
+    public User(String email, String password, String username) {
         this.email = email;
         this.password = password;
-        this.password =  username;
+        this.username=username;
     }
 
     public String getEmail() {
@@ -23,21 +23,22 @@ public class User {
     public String getPassword() {
         return password;
     }
-    public String getUsername() {
-        return  username;
-    }
+ 
 
     public int getId() {
         return id;
     }
+    public String getUsername() {
+        return username;
+    }
 
     public void register() {
         try (Connection con = DB.sql2o.open()) {
-            String sql = "INSERT INTO users (email,password,username) VALUES (:email,:password,:username)";
+            String sql = "INSERT INTO users (username,email,password) VALUES (:username,:email,:password)";
            this.id =(int) con.createQuery(sql,true)
+                    .addParameter("username", this.username)
                     .addParameter("email", this.email)
                     .addParameter("password", this.password)
-                    .addParameter("username", this.username)
                     .executeUpdate()
                    .getKey();
         }
